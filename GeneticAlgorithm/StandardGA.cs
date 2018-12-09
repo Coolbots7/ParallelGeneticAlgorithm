@@ -4,21 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GeneticAlgorithm;
-using System.Threading;
-using System.Diagnostics;
 using System.IO;
 
 namespace GeneticAlgorithm
 {
-    public class StandardGA
+    public class StandardGA : GA
     {
-
-        private GA geneticAlgorithm;
         private List<int[]> points;
-        private Thread runThread;
-        private ManualResetEvent run;
 
-        private Stopwatch runTime;
 
         private int generation;
 
@@ -31,10 +24,6 @@ namespace GeneticAlgorithm
 
         private static string LogFilePath = @"C:\Users\coolbots7\Desktop\StandardGA.csv";
 
-        //private static string SQLiteDBPath = "StandardGA.sqlite";
-        //private int TestID;
-
-        //private SQLiteConnection m_dbConnection;
 
         public StandardGA()
         {
@@ -54,106 +43,75 @@ namespace GeneticAlgorithm
                 }
             }
 
-            //LogFilePath = string.Concat(
-            //Path.GetFileNameWithoutExtension(LogFilePath),
-            //DateTime.Now.ToFileTime(),
-            //Path.GetExtension(LogFilePath)
-            //);
-            //LogFilePath = Path.GetFileNameWithoutExtension(LogFilePath) + DateTime.Now.ToFileTime() + Path.GetExtension(LogFilePath);
+            //create dandom generation 0
+            Random rand = new Random();
+            for (int i = 0; i < generationSize; i++)
+            {
+                chromosome c = new chromosome();
+                //c.gene = Enumerable.Range(0, this.Genes) as List<int>;
+                c.gene = Enumerable.Range(0, points.Count())
+                    .Select(j => new Tuple<int, int>(rand.Next(points.Count()), j))
+                    .OrderBy(k => k.Item1)
+                    .Select(l => l.Item2).ToList();
 
-            //bool initDatabase = false;
-            //if(!File.Exists(SQLiteDBPath))
-            //{
-            //    SQLiteConnection.CreateFile(SQLiteDBPath);
-            //    initDatabase = true;
-            //}
-
-            //this.m_dbConnection = new SQLiteConnection("Data Source=" + SQLiteDBPath + ";Version=3;");
-            //this.m_dbConnection.Open();
-
-            //if(initDatabase)
-            //{
-            //    string createTestSQL = "CREATE TABLE t_Test (ID int NOT NULL PRIMARY KEY AUTO_INCREMENT, CreatedOn DATETIME DEFAULT GETDATE())";
-            //    SQLiteCommand createTestTable = new SQLiteCommand(createTestSQL, this.m_dbConnection);
-            //    createTestTable.ExecuteNonQuery();
-
-            //    string createTestLogSQL = "CREATE TABLE t_TestLog (ID int NOT NULL PRIMARY KEY AUTO_INCREMENT, TestID int, CreatedOn DATETIME DEFAULT GETDATE())";
-            //    SQLiteCommand createTestLogTable = new SQLiteCommand(createTestLogSQL, this.m_dbConnection);
-            //    createTestLogTable.ExecuteNonQuery();
-            //}
-
-            //SQLiteCommand createTest = new SQLiteCommand("INSERT INTO t_Test () OUTPUT Inserted.ID VALUES ()", this.m_dbConnection);
-            //this.TestID = (int)createTest.ExecuteScalar();
-            //Console.WriteLine("TEST ID: " + TestID.ToString());
-
-
-            this.geneticAlgorithm = new GA(points.Count(), generationSize);
-            this.runThread = new Thread(loop);
-            this.run = new ManualResetEvent(false);
-            this.runTime = new Stopwatch();
-
-
+                this.CurrentGeneration.Add(c);
+            }
 
             this.generation = 0;
             this.HighScore = Int64.MaxValue;
             this.HighScoreGeneration = -1;
 
-            this.runThread.Start();
         }
 
-        public void loop()
+        protected override void Train()
         {
-            List<chromosome> currentGeneration = this.geneticAlgorithm.CurrentGeneration;
-            while (this.run.WaitOne())
+            //test current generation
+            double generationHighScore = Int64.MaxValue;
+            foreach (chromosome c in this.CurrentGeneration)
             {
-                //test current generation
-                double generationHighScore = Int64.MaxValue;
-                foreach (chromosome c in currentGeneration)
+                c.score = fittness(c.gene);
+                if (c.score < generationHighScore)
                 {
-                    c.score = fittness(c.gene);
-                    if (c.score < generationHighScore)
-                    {
-                        generationHighScore = c.score;
-                    }
-                    if (c.score < this.HighScore)
-                    {
-                        this.HighScore = c.score;
-                        this.HighScoreGeneration = this.generation;
-                        this.BestChromosome = c.gene;
-                    }
+                    generationHighScore = c.score;
                 }
+                if (c.score < this.HighScore)
+                {
+                    this.HighScore = c.score;
+                    this.HighScoreGeneration = this.generation;
+                    this.BestChromosome = c.gene;
+                }
+            }
 
-                //select top
-                List<chromosome> nextGeneration = currentGeneration.OrderByDescending(c => c.score).ToList().GetRange(0, generationCarryover);
+            //select top
+            List<chromosome> nextGeneration = this.CurrentGeneration.OrderByDescending(c => c.score).ToList().GetRange(0, generationCarryover);
+
+            //crossover
+            for (int i = 0; i < generationSize - generationCarryover; i++)
+            {
+                chromosome ParentA = this.RouletteWheelSelection(nextGeneration.GetRange(0, generationCarryover));
+                chromosome ParentB = this.RouletteWheelSelection(nextGeneration.GetRange(0, generationCarryover));
 
                 //crossover
-                for (int i = 0; i < generationSize - generationCarryover; i++)
-                {
-                    chromosome ParentA = this.geneticAlgorithm.RouletteWheelSelection(nextGeneration.GetRange(0, generationCarryover));
-                    chromosome ParentB = this.geneticAlgorithm.RouletteWheelSelection(nextGeneration.GetRange(0, generationCarryover));
-
-                    //crossover
-                    nextGeneration.Add(this.geneticAlgorithm.Crossover(ParentA, ParentB));
-                }
-
-                //mutate
-                foreach (chromosome c in nextGeneration)
-                {
-                    this.geneticAlgorithm.Mutate(c);
-                }
-
-                currentGeneration = nextGeneration;
-
-                if (this.generation % 1000 == 0)
-                {
-                    using (StreamWriter file = File.AppendText(LogFilePath))
-                    {
-                        file.WriteLineAsync(DateTime.Now.ToString() + ", " + generation + ", " + this.runTime.ElapsedMilliseconds.ToString() + ", " + generationHighScore + ", " + this.HighScore + ", " + this.HighScoreGeneration);
-                    }
-                }
-
-                this.generation++;
+                nextGeneration.Add(this.Crossover(ParentA, ParentB));
             }
+
+            //mutate
+            foreach (chromosome c in nextGeneration)
+            {
+                this.Mutate(c);
+            }
+
+            this.CurrentGeneration = nextGeneration;
+
+            if (this.generation % 1000 == 0)
+            {
+                using (StreamWriter file = File.AppendText(LogFilePath))
+                {
+                    file.WriteLineAsync(DateTime.Now.ToString() + ", " + generation + ", " + this.ElapsedMilliseconds.ToString() + ", " + generationHighScore + ", " + this.HighScore + ", " + this.HighScoreGeneration);
+                }
+            }
+
+            this.generation++;
         }
 
         private double fittness(List<int> order)
@@ -177,34 +135,9 @@ namespace GeneticAlgorithm
             return Math.Sqrt(Math.Pow(xdist, 2) + Math.Pow(ydist, 2));
         }
 
-        public bool Start()
-        {
-            this.run.Set();
-            this.runTime.Start();
-            return true;
-        }
-
-        public bool Stop()
-        {
-            this.run.Reset();
-            this.runTime.Stop();
-            return true;
-        }
-
-        public bool Reset()
-        {
-            throw new NotImplementedException();
-            this.runTime.Reset();
-        }
-
         public int GetGeneration()
         {
             return this.generation;
-        }
-
-        public long GetRuntime()
-        {
-            return this.runTime.ElapsedMilliseconds;
         }
 
         public double GetHighScore()
