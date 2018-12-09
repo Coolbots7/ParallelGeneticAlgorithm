@@ -13,8 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Threading;
-using LiveCharts;
-using LiveCharts.Wpf;
+using GeneticAlgorithm;
 
 namespace GAForm
 {
@@ -23,7 +22,7 @@ namespace GAForm
     /// </summary>
     public partial class MainWindow : Window
     {
-        private StandardGA.StandardGA standardGA;
+        private GeneticAlgorithm.StandardGA standardGA;
         
         public MainWindow()
         {
@@ -31,7 +30,7 @@ namespace GAForm
             
             DataContext = this;
 
-            this.standardGA = new StandardGA.StandardGA();
+            this.standardGA = new GeneticAlgorithm.StandardGA();
             (new Thread(new ThreadStart(() =>
             {
                 while (true)

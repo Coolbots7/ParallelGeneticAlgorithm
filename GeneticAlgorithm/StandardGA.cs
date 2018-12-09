@@ -7,12 +7,12 @@ using GeneticAlgorithm;
 using System.Threading;
 using System.Diagnostics;
 using System.IO;
-using System.Data.SQLite;
 
-namespace StandardGA
+namespace GeneticAlgorithm
 {
     public class StandardGA
     {
+
         private GA geneticAlgorithm;
         private List<int[]> points;
         private Thread runThread;
@@ -231,6 +231,5 @@ namespace StandardGA
 
             return "none";
         }
-
     }
 }

@@ -84,6 +84,7 @@
     <Compile Include="chromosome.cs" />
     <Compile Include="GA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StandardGA.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

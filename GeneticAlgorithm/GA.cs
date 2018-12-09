@@ -14,7 +14,22 @@ namespace GeneticAlgorithm
 
         private int Genes;
         private int Chromosomes;
-        private double MutationProbability;
+
+        //Probability a mutation occurs when indexing across a gene
+        private double _mutationProbability = 0.33;
+
+        public double MutationProbability
+        {
+            get
+            {
+                return this._mutationProbability;
+            }
+
+            set
+            {
+                this._mutationProbability = value;
+            }
+        }
 
         public GA(int genes, int chromosomes)
         {
@@ -24,7 +39,6 @@ namespace GeneticAlgorithm
 
             this.Genes = genes;
             this.Chromosomes = chromosomes;
-            this.MutationProbability = 0.33;
 
             //create initial chromosomes with random genes
             this.CurrentGeneration = new List<chromosome>();
@@ -119,7 +133,7 @@ namespace GeneticAlgorithm
 
             for(int i=0;i<Child.gene.Count()-1;i++)
             {
-                if(rand.NextDouble() < this.MutationProbability)
+                if(rand.NextDouble() < this._mutationProbability)
                 {
                     Int32 temp = Child.gene[i];
                     Child.gene[i] = Child.gene[i + 1];

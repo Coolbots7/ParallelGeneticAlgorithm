@@ -142,9 +142,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StandardGA\StandardGA.csproj">
-      <Project>{dd90684c-dd29-4aa0-83e4-f057c586abbe}</Project>
-      <Name>StandardGA</Name>
+    <ProjectReference Include="..\GeneticAlgorithm\GeneticAlgorithm.csproj">
+      <Project>{4fbb75fc-fc26-4ff5-a999-5d31436bab91}</Project>
+      <Name>GeneticAlgorithm</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
