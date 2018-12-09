@@ -122,8 +122,6 @@ namespace GeneticAlgorithm
             }
         }
 
-
-
         public bool Start()
         {
             this.run.Set();

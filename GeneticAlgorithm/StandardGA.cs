@@ -10,38 +10,29 @@ namespace GeneticAlgorithm
 {
     public class StandardGA : GA
     {
-        private List<int[]> points;
-
-
         private int generation;
 
-        private static int generationSize = 40;
-        private static int generationCarryover = 10;
+        private int generationSize;
+        private int generationCarryover;
 
         private double HighScore;
         private int HighScoreGeneration;
         private List<int> BestChromosome;
 
+        public delegate double FittnessDelegate(GeneticAlgorithm.chromosome c);
+
+        private FittnessDelegate _fittness;
+
         private static string LogFilePath = @"C:\Users\coolbots7\Desktop\StandardGA.csv";
 
 
-        public StandardGA()
+        public StandardGA(int GeneSize, int GenerationSize, int GenerationCarryover, FittnessDelegate fittness)
         {
-            //load points from csv
-            points = new List<int[]>();
-            using (var reader = new StreamReader(@"C:\points.csv"))
-            {
-                while (!reader.EndOfStream)
-                {
-                    string line = reader.ReadLine();
-                    var coords = line.Trim().Split(',');
 
-                    int[] point = new int[2];
-                    point[0] = Convert.ToInt32(coords[0].Trim());
-                    point[1] = Convert.ToInt32(coords[1].Trim());
-                    points.Add(point);
-                }
-            }
+            this.generationSize = GenerationSize;
+            this.generationCarryover = GenerationCarryover;
+
+            this._fittness = fittness;
 
             //create dandom generation 0
             Random rand = new Random();
@@ -49,8 +40,8 @@ namespace GeneticAlgorithm
             {
                 chromosome c = new chromosome();
                 //c.gene = Enumerable.Range(0, this.Genes) as List<int>;
-                c.gene = Enumerable.Range(0, points.Count())
-                    .Select(j => new Tuple<int, int>(rand.Next(points.Count()), j))
+                c.gene = Enumerable.Range(0, GeneSize)
+                    .Select(j => new Tuple<int, int>(rand.Next(GeneSize), j))
                     .OrderBy(k => k.Item1)
                     .Select(l => l.Item2).ToList();
 
@@ -69,7 +60,7 @@ namespace GeneticAlgorithm
             double generationHighScore = Int64.MaxValue;
             foreach (chromosome c in this.CurrentGeneration)
             {
-                c.score = fittness(c.gene);
+                c.score = this._fittness(c);
                 if (c.score < generationHighScore)
                 {
                     generationHighScore = c.score;
@@ -114,26 +105,6 @@ namespace GeneticAlgorithm
             this.generation++;
         }
 
-        private double fittness(List<int> order)
-        {
-            double score = 0;
-
-            for (int i = 0; i < order.Count() - 1; i++)
-            {
-                int[] p1 = points[order[i]];
-                int[] p2 = points[order[i + 1]];
-                score += distance(p1[0], p1[1], p2[0], p2[1]);
-            }
-
-            return score;
-        }
-
-        private double distance(double x1, double y1, double x2, double y2)
-        {
-            double xdist = Math.Abs(x1 - x2);
-            double ydist = Math.Abs(y1 - y2);
-            return Math.Sqrt(Math.Pow(xdist, 2) + Math.Pow(ydist, 2));
-        }
 
         public int GetGeneration()
         {
