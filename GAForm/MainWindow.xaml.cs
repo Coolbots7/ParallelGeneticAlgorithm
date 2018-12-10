@@ -52,6 +52,10 @@ namespace GAForm
             int generationCarryover = 100;
             int numThreads = 50;
 
+            GenerationSizeTextBox.Text = generationSize.ToString();
+            GenerationCarryoverTextBox.Text = generationCarryover.ToString();
+            NumThreadsTextBox.Text = numThreads.ToString();
+
             this.standardGA = new GeneticAlgorithm.StandardGA(points.Count(), generationSize, generationCarryover, new StandardGA.FittnessDelegate(fittness));
             this.parallelGA = new ParallelGA(points.Count(), generationSize, generationCarryover, numThreads, new ParallelGA.FittnessDelegate(fittness));
 
@@ -73,6 +77,9 @@ namespace GAForm
                 Dispatcher.Invoke(new UpdateUIMethodInvoker(UpdateUI));
                 return;
             }
+
+            RuntimeTextBox.Text = this.parallelGA.GetRuntime();
+
             GenerationTextBox.Text = this.standardGA.GetGeneration().ToString();
             HighScoreGenerationTextBox.Text = this.standardGA.GetHighScoreGeneration().ToString();
             HighScoreTextBox.Text = this.standardGA.GetHighScore().ToString();

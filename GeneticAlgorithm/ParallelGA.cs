@@ -169,5 +169,11 @@ namespace GeneticAlgorithm
 
             return "none";
         }
+
+        public string GetRuntime()
+        {
+            TimeSpan ts = this.GetStopwatch.Elapsed;
+            return ts.ToString("mm\\:ss\\.ff");
+        }
     }
 }

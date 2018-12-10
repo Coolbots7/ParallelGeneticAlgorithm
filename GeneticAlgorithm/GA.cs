@@ -151,5 +151,13 @@ namespace GeneticAlgorithm
                 return this.runTime.ElapsedMilliseconds;
             }
         }
+
+        public Stopwatch GetStopwatch
+        {
+            get
+            {
+                return this.runTime;
+            }
+        }
     }
 }
