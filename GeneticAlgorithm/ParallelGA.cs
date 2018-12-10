@@ -17,38 +17,28 @@ namespace GeneticAlgorithm
         private int generationSize;
         private int generationCarryover;
 
-
-        private List<chromosome> NextGeneration;
-        private List<chromosome> TopPerformers;
+        private int _numThreads { get; set; } = 50;
+        
+        private List<chromosome> CompletedTesting;
 
         private double HighScore;
         private int HighScoreGeneration;
         private List<int> BestChromosome;
-
-        // The mechanism for waking up the second thread once data is available
-        AutoResetEvent _dataAvailable = new AutoResetEvent(false);
-        ManualResetEvent _nextGenerationReadt = new ManualResetEvent(false);
-        // The mechanism for making sure that the data object is not overwritten while it is being read.
-        ReaderWriterLockSlim _readWriteLock = new ReaderWriterLockSlim();
-        Thread nextGeneration;
+        
 
         public ParallelGA(int GeneSize, int GenerationSize, int GenerationCarryover, FittnessDelegate fittness)
         {
             this.generationSize = GenerationSize;
             this._fittness = fittness;
             this.generationCarryover = GenerationCarryover;
-
-            this.NextGeneration = new List<chromosome>();
-            this.TopPerformers = new List<chromosome>();
-
-
-
+            
+            this.CompletedTesting = new List<chromosome>();
+            
             //genrate rangom 0th generation
             Random rand = new Random();
             for (int i = 0; i < generationSize; i++)
             {
                 chromosome c = new chromosome();
-                //c.gene = Enumerable.Range(0, this.Genes) as List<int>;
                 c.gene = Enumerable.Range(0, GeneSize)
                     .Select(j => new Tuple<int, int>(rand.Next(GeneSize), j))
                     .OrderBy(k => k.Item1)
@@ -64,31 +54,27 @@ namespace GeneticAlgorithm
 
         protected override void Train()
         {
-            //start thread to generate next generation in parallel
-            this.NextGeneration.Clear();
-            this.TopPerformers.Clear();
 
-            nextGeneration = new Thread(GenerateNextGeneration);
-            nextGeneration.Start();
-
-            //test fittness of current generation
-            foreach (chromosome c in this.CurrentGeneration)
+            //split current generation across threads to test
+            WaitHandle[] waitHandles = new WaitHandle[this._numThreads];
+            int numPerThread = (int)Math.Ceiling((double)(this.generationSize / this._numThreads));
+            for(int i=0;i<this._numThreads;i++)
             {
-                c.score = this._fittness(c);
+                var j = i;
+                var handle = new EventWaitHandle(false, EventResetMode.ManualReset);
+                int index = j * numPerThread;
+                var thread = new Thread(() => TestThread(handle, this.CurrentGeneration.GetRange(index, numPerThread)));
+                
+                waitHandles[j] = handle;
+                thread.Start();
+            }
 
-                //pass to thread making next generaiton
-                _readWriteLock.EnterWriteLock();
-                try
-                {
-                    List<chromosome> tested = this.CurrentGeneration.Where(x => x.score < double.MaxValue).ToList();
-                    this.TopPerformers = tested.OrderBy(x => x.score).ToList().GetRange(0, Math.Min(this.generationCarryover, tested.Count()));
-                    this._dataAvailable.Set();
-                }
-                finally
-                {
-                    _readWriteLock.ExitWriteLock();
-                }
-
+            //wait for all test threads to finish
+            WaitHandle.WaitAll(waitHandles);
+                        
+            //test fittness of current generation
+            foreach (chromosome c in this.CompletedTesting.Where(c => c!= null))
+            {
                 if (c.score < this.HighScore)
                 {
                     this.HighScore = c.score;
@@ -97,68 +83,42 @@ namespace GeneticAlgorithm
                 }
             }
 
-            //wait for next generaiton to be ready
-            this._nextGenerationReadt.WaitOne();
-            KillNextGeneraitonThread();
+            List<chromosome> top = this.CompletedTesting.Where(c => c!= null).OrderBy(c => c.score).ToList().GetRange(0, this.generationCarryover);
+            List<chromosome> nextGeneration = new List<chromosome>();
 
-            this.NextGeneration.AddRange(this.TopPerformers);
-
-            while (this.NextGeneration.Count() < this.generationSize)
+            //crossover
+            for (int i = 0; i < generationSize - generationCarryover; i++)
             {
-                chromosome ParentA = this.RouletteWheelSelection(this.TopPerformers);
-                chromosome ParentB = this.RouletteWheelSelection(this.TopPerformers);
+                chromosome ParentA = this.RouletteWheelSelection(top);
+                chromosome ParentB = this.RouletteWheelSelection(top);
 
-                chromosome Child = this.Crossover(ParentA, ParentB);
-                this.Mutate(Child);
-                this.NextGeneration.Add(Child);
+                //crossover
+                nextGeneration.Add(this.Crossover(ParentA, ParentB));
             }
 
-            this.CurrentGeneration = new List<chromosome>(this.NextGeneration);
+            //mutate
+            foreach (chromosome c in nextGeneration)
+            {
+                this.Mutate(c);
+            }
+
+            nextGeneration.AddRange(new List<chromosome>(top));
+            this.CurrentGeneration = nextGeneration;
 
             this.generation++;
         }
 
-        private void GenerateNextGeneration()
+        private void TestThread(EventWaitHandle handle, List<chromosome> subset)
         {
-            //TODO determine when next generation is ready and leave thread
-
-            List<chromosome> topPerformers;
-            while (true)
+            foreach (chromosome c in subset)
             {
-                _dataAvailable.WaitOne();
-                this._nextGenerationReadt.Reset();
-                _readWriteLock.EnterReadLock();
-                try
-                {
-                    topPerformers = this.TopPerformers;
-
-                    if (topPerformers.Count() > 2 && this.NextGeneration.Count() < this.generationSize - this.generationCarryover)
-                    {
-                        //for (int i = 0; i < 1; i++)
-                        //{
-                        chromosome ParentA = this.RouletteWheelSelection(topPerformers);
-                        chromosome ParentB = this.RouletteWheelSelection(topPerformers);
-
-                        chromosome Child = this.Crossover(ParentA, ParentB);
-                        this.Mutate(Child);
-                        this.NextGeneration.Add(Child);
-                        //}
-                    }
-                }
-                finally
-                {
-                    _readWriteLock.ExitReadLock();
-                }
-
-                this._nextGenerationReadt.Set();
+                c.score = this._fittness(c);
+                this.CompletedTesting.Add(new chromosome(c));
             }
+
+            handle.Set();
         }
 
-        [SecurityPermissionAttribute(SecurityAction.Demand, ControlThread = true)]
-        private void KillNextGeneraitonThread()
-        {
-            nextGeneration.Abort();
-        }
 
         public int GetGeneration()
         {

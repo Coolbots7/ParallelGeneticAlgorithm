@@ -48,8 +48,11 @@ namespace GAForm
                 }
             }
 
-            this.standardGA = new GeneticAlgorithm.StandardGA(points.Count(), 40, 10, new StandardGA.FittnessDelegate(fittness));
-            this.parallelGA = new ParallelGA(points.Count(), 40, 10,new ParallelGA.FittnessDelegate(fittness));
+            int generationSize = 4000;
+            int generationCarryover = 100;
+
+            this.standardGA = new GeneticAlgorithm.StandardGA(points.Count(), generationSize, generationCarryover, new StandardGA.FittnessDelegate(fittness));
+            this.parallelGA = new ParallelGA(points.Count(), generationSize, generationCarryover, new ParallelGA.FittnessDelegate(fittness));
 
             (new Thread(new ThreadStart(() =>
             {

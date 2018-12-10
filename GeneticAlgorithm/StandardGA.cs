@@ -20,7 +20,6 @@ namespace GeneticAlgorithm
         private List<int> BestChromosome;
 
         public delegate double FittnessDelegate(GeneticAlgorithm.chromosome c);
-
         private FittnessDelegate _fittness;
 
         private static string LogFilePath = @"C:\Users\coolbots7\Desktop\StandardGA.csv";
@@ -74,13 +73,14 @@ namespace GeneticAlgorithm
             }
 
             //select top
-            List<chromosome> nextGeneration = this.CurrentGeneration.OrderByDescending(c => c.score).ToList().GetRange(0, generationCarryover);
+            List<chromosome> top = this.CurrentGeneration.OrderBy(c => c.score).ToList().GetRange(0, generationCarryover);
+            List<chromosome> nextGeneration = new List<chromosome>();
 
             //crossover
             for (int i = 0; i < generationSize - generationCarryover; i++)
             {
-                chromosome ParentA = this.RouletteWheelSelection(nextGeneration.GetRange(0, generationCarryover));
-                chromosome ParentB = this.RouletteWheelSelection(nextGeneration.GetRange(0, generationCarryover));
+                chromosome ParentA = this.RouletteWheelSelection(top);
+                chromosome ParentB = this.RouletteWheelSelection(top);
 
                 //crossover
                 nextGeneration.Add(this.Crossover(ParentA, ParentB));
@@ -91,7 +91,7 @@ namespace GeneticAlgorithm
             {
                 this.Mutate(c);
             }
-
+            nextGeneration.AddRange(new List<chromosome>(top));
             this.CurrentGeneration = nextGeneration;
 
             if (this.generation % 1000 == 0)

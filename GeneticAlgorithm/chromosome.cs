@@ -17,5 +17,11 @@ namespace GeneticAlgorithm
             gene = new List<int>();
             score = double.MaxValue;
         }
+
+        public chromosome(chromosome c)
+        {
+            this.gene = c.gene;
+            this.score = c.score;
+        }
     }
 }
