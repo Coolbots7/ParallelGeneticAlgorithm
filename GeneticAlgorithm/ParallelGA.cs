@@ -56,6 +56,7 @@ namespace GeneticAlgorithm
         {
 
             //split current generation across threads to test
+            this.CompletedTesting.Clear();
             WaitHandle[] waitHandles = new WaitHandle[this._numThreads];
             int numPerThread = (int)Math.Ceiling((double)(this.generationSize / this._numThreads));
             for(int i=0;i<this._numThreads;i++)
