@@ -15,7 +15,7 @@ namespace GeneticAlgorithm
         public chromosome()
         {
             gene = new List<int>();
-            score = double.MinValue;
+            score = double.MaxValue;
         }
     }
 }

@@ -15,8 +15,16 @@
         <TextBox x:Name="HighScoreTextBox" HorizontalAlignment="Left" Height="23" Margin="10,181,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
         <Label Content="High Score Generation" HorizontalAlignment="Left" Margin="10,218,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="HighScoreGenerationTextBox" HorizontalAlignment="Left" Height="23" Margin="10,245,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="BestChromosomeTextBox" HorizontalAlignment="Left" Height="23" Margin="10,323,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="774"/>
+        <TextBox x:Name="BestChromosomeTextBox" HorizontalAlignment="Left" Height="23" Margin="10,323,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="604"/>
         <Label Content="Best Chromosome" HorizontalAlignment="Left" Margin="10,292,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="ParallelGenerationTextBox" HorizontalAlignment="Left" Height="23" Margin="636,96,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Parallel Generation" HorizontalAlignment="Left" Margin="636,70,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="ParallelHighScoreTextBox" HorizontalAlignment="Left" Height="23" Margin="636,167,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Parallel High Score" HorizontalAlignment="Left" Margin="636,140,0,0" VerticalAlignment="Top"/>
+        <Label Content="Parallel High Score Generation" HorizontalAlignment="Left" Margin="636,227,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="ParallelHighScoreGenerationTextBox" HorizontalAlignment="Left" Height="23" Margin="636,253,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Best Parallel Gene" HorizontalAlignment="Left" Margin="10,351,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="BestParallelGeneTextBox" HorizontalAlignment="Left" Height="23" Margin="10,382,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="604"/>
 
     </Grid>
 </Window>

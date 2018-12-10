@@ -23,7 +23,8 @@ namespace GAForm
     /// </summary>
     public partial class MainWindow : Window
     {
-        private GeneticAlgorithm.StandardGA standardGA;
+        private StandardGA standardGA;
+        private ParallelGA parallelGA;
         private List<int[]> points;
 
 
@@ -48,6 +49,8 @@ namespace GAForm
             }
 
             this.standardGA = new GeneticAlgorithm.StandardGA(points.Count(), 40, 10, new StandardGA.FittnessDelegate(fittness));
+            this.parallelGA = new ParallelGA(points.Count(), 40, 10,new ParallelGA.FittnessDelegate(fittness));
+
             (new Thread(new ThreadStart(() =>
             {
                 while (true)
@@ -70,11 +73,17 @@ namespace GAForm
             HighScoreGenerationTextBox.Text = this.standardGA.GetHighScoreGeneration().ToString();
             HighScoreTextBox.Text = this.standardGA.GetHighScore().ToString();
             BestChromosomeTextBox.Text = this.standardGA.GetBestChromosome();
+
+            ParallelGenerationTextBox.Text = this.parallelGA.GetGeneration().ToString();
+            ParallelHighScoreTextBox.Text = this.parallelGA.GetHighScore().ToString();
+            ParallelHighScoreGenerationTextBox.Text =this.parallelGA.GetHighScoreGeneration().ToString();
+            BestParallelGeneTextBox.Text = this.parallelGA.GetBestChromosome();
         }
 
         private void Start_Button_Click(object sender, RoutedEventArgs e)
         {
             this.standardGA.Start();
+            this.parallelGA.Start();
             StartButton.IsEnabled = false;
             StopButton.IsEnabled = true;
         }
@@ -82,6 +91,7 @@ namespace GAForm
         private void Stop_Button_Click(object sender, RoutedEventArgs e)
         {
             this.standardGA.Stop();
+            this.parallelGA.Stop();
             StartButton.IsEnabled = true;
             StopButton.IsEnabled = false;
         }
