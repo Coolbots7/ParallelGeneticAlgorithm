@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Security.Permissions;
+using System.IO;
 
 namespace GeneticAlgorithm
 {
@@ -26,6 +27,7 @@ namespace GeneticAlgorithm
         private int HighScoreGeneration;
         private List<int> BestChromosome;
 
+        private static string LogFilePath = @"C:\Users\coolbots7\Desktop\ParallelGA.csv";
 
         public ParallelGA(int GeneSize, int GenerationSize, int GenerationCarryover, int NumThreads, FittnessDelegate fittness)
         {
@@ -77,8 +79,13 @@ namespace GeneticAlgorithm
             WaitHandle.WaitAll(waitHandles);
 
             //test fittness of current generation
+            double generationHighScore = double.MaxValue;
             foreach (chromosome c in this.CompletedTesting.Where(c => c != null))
             {
+                if (c.score < generationHighScore)
+                {
+                    generationHighScore = c.score;
+                }
                 if (c.score < this.HighScore)
                 {
                     this.HighScore = c.score;
@@ -106,6 +113,14 @@ namespace GeneticAlgorithm
 
             this.NextGeneration.AddRange(new List<chromosome>(top));
             this.CurrentGeneration = new List<chromosome>(this.NextGeneration);
+
+            if (this.generation % 1 == 0)
+            {
+                using (StreamWriter file = File.AppendText(LogFilePath))
+                {
+                    file.WriteLineAsync(DateTime.Now.ToString() + ", " + generation + ", " + this.ElapsedMilliseconds.ToString() + ", " + generationHighScore + ", " + this.HighScore + ", " + this.HighScoreGeneration);
+                }
+            }
 
             this.generation++;
         }
@@ -173,7 +188,7 @@ namespace GeneticAlgorithm
         public string GetRuntime()
         {
             TimeSpan ts = this.GetStopwatch.Elapsed;
-            return ts.ToString("mm\\:ss\\.ff");
+            return ts.ToString("hh\\:mm\\:ss\\.ff");
         }
     }
 }
