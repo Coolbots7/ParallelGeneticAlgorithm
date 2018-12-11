@@ -56,7 +56,7 @@ namespace GeneticAlgorithm
         protected override void Train()
         {
             //test current generation
-            double generationHighScore = Int64.MaxValue;
+            double generationHighScore = double.MaxValue;
             foreach (chromosome c in this.CurrentGeneration)
             {
                 c.score = this._fittness(c);
@@ -91,10 +91,12 @@ namespace GeneticAlgorithm
             {
                 this.Mutate(c);
             }
+
+            //Add top performers from current generation to next generation
             nextGeneration.AddRange(new List<chromosome>(top));
             this.CurrentGeneration = nextGeneration;
 
-            if (this.generation % 1000 == 0)
+            if (this.generation % 1 == 0)
             {
                 using (StreamWriter file = File.AppendText(LogFilePath))
                 {

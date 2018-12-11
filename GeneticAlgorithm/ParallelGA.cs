@@ -78,7 +78,7 @@ namespace GeneticAlgorithm
             //wait for all test threads to finish
             WaitHandle.WaitAll(waitHandles);
 
-            //test fittness of current generation
+            //get fittness of current generation
             double generationHighScore = double.MaxValue;
             foreach (chromosome c in this.CompletedTesting.Where(c => c != null))
             {
@@ -94,10 +94,12 @@ namespace GeneticAlgorithm
                 }
             }
 
+            //order current generation and get top performers
             List<chromosome> top = this.CompletedTesting.Where(c => c != null).OrderBy(c => c.score).ToList().GetRange(0, this.generationCarryover);
 
             this.NextGeneration.Clear();
 
+            //split needed children generation among multiple threads
             WaitHandle[] generateWaitHandles = new WaitHandle[this._numThreads];
             int numToGenerate = (int)Math.Ceiling((double)this.generationSize / this._numThreads);
             for(int i=0;i<this._numThreads;i++)
@@ -111,6 +113,7 @@ namespace GeneticAlgorithm
             }
             WaitHandle.WaitAll(generateWaitHandles);
 
+            //add top erformers from current generation to next generation
             this.NextGeneration.AddRange(new List<chromosome>(top));
             this.CurrentGeneration = new List<chromosome>(this.NextGeneration);
 
@@ -146,6 +149,7 @@ namespace GeneticAlgorithm
                 //crossover
                 chromosome Child = this.Crossover(ParentA, ParentB);
 
+                //mutate
                 this.Mutate(Child);
 
                 this.NextGeneration.Add(Child);
