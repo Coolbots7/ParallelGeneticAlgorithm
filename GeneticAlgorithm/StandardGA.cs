@@ -33,12 +33,11 @@ namespace GeneticAlgorithm
 
             this._fittness = fittness;
 
-            //create dandom generation 0
+            //create random generation 0
             Random rand = new Random();
             for (int i = 0; i < generationSize; i++)
             {
                 chromosome c = new chromosome();
-                //c.gene = Enumerable.Range(0, this.Genes) as List<int>;
                 c.gene = Enumerable.Range(0, GeneSize)
                     .Select(j => new Tuple<int, int>(rand.Next(GeneSize), j))
                     .OrderBy(k => k.Item1)
