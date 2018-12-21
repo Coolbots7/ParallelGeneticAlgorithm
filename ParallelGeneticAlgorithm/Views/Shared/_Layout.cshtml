@@ -2,15 +2,65 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
     <title>@ViewBag.Title</title>
-    @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <script src="~/Scripts/canvasjs.min.js"></script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet">
+    <link href="~/Content/font-awesome.css" rel="stylesheet">
+    @Styles.Render("~/Content/css")
+
 </head>
-<body>
-    @RenderBody()
+<body class="bg-light">
+    <nav class="site-header sticky-top py-1">
+        <div class="container d-flex flex-column flex-md-row justify-content-between">
+            <a class="py-2" href="#">
+                Parallel Genetic Algorithm
+            </a>
+            <a class="py-2 d-none d-md-inline-block" href="#">Home</a>
+            <a class="py-2 d-none d-md-inline-block" href="#">Settings</a>
+            <a class="py-2 d-none d-md-inline-block" href="#">Log</a>
+            <a class="py-2 d-none d-md-inline-block" href="@Url.Action("About", "Home")">About</a>
+        </div>
+    </nav>
+
+    <div class="position-relative overflow-hidden p-md-2 m-md-3 text-center">
+
+        @RenderBody()
+
+        <footer class="pt-4 my-md-5 pt-md-5 border-top">
+            <div class="row">
+                <div class="col-12 col-md">
+                    <small class="d-block mb-3 text-muted">&copy; 2017-2018</small>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Features</h5>
+                    <ul class="list-unstyled text-small">
+                        <li><a class="text-muted" href="https://github.com/Coolbots7/ParallelGeneticAlgorithm" target="_blank">Cool stuff</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Resources</h5>
+                    <ul class="list-unstyled text-small">
+                        <li><a class="text-muted" href="https://github.com/Coolbots7/ParallelGeneticAlgorithm" target="_blank">GitHub</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>About</h5>
+                    <ul class="list-unstyled text-small">
+                        <li><a class="text-muted" href="@Url.Action("About", "Home")">Team</a></li>
+                        @*<li><a class="text-muted" href="#">Terms</a></li>*@
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </div>
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
 </html>

@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<div class="card-deck mb-3 text-center">
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <span class="my-0 font-weight-normal">Controls</span>
+        </div>
+        <div class="card-body">
+            <button type="button" class="btn btn-outline-success"><i class="fa fa-play"></i>&nbsp;Start</button>
+            <button type="button" class="btn btn-outline-secondary"><i class="fa fa-pause"></i>&nbsp;Pause</button>
+            <button type="button" class="btn btn-outline-secondary"><i class="fa fa-stop"></i>&nbsp;Stop</button>
+            <br />
+            <button type="button" class="btn btn-sm btn-outline-danger mt-3">Reset</button>
+        </div>
+    </div>
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <span class="my-0 font-weight-normal">Settings</span>
+        </div>
+        <div class="card-body">
+        </div>
+    </div>
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <span class="my-0 font-weight-normal">Export</span>
+        </div>
+        <div class="card-body">
+            <button type="button" class="btn btn-sm btn-outline-info mb-2">Export CSV</button><br />
+            <button type="button" class="btn btn-sm btn-outline-info">Export HTML</button>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <h5>Current Generation</h5>
+                <h6>0</h6>
+            </div>
+            <div class="col">
+                <h5>Best Generation Score</h5>
+                <h6>-1</h6>
+            </div>
+            <div class="col">
+                <h5>Best Overall Score</h5>
+                <h6>-1 <span class="text-muted"> (Generation X)</span></h6>
+            </div>
+            <div class="col">
+                <h5>Run Time</h5>
+                <h6>00:00:00</h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <div class="card" id="generationScoreChart" style="height: 400px;">
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                Event Log
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Message</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Tested Generation 0 - Chromosome 0: Score 400</td>
+                        <td>2018-12-08 00:00:00.000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function () {
+        var generationScoreChart = new CanvasJS.Chart("generationScoreChart", {
+            animationEnabled: true,
+            theme: "light2",
+            height: 380,
+            axisY: {
+                title: "Score",
+                includeZero: false
+            },
+            axisX: {
+                title: "Generation"
+            },
+            data: [{
+                type: "spline",
+                dataPoints: [
+                    { y: 450 },
+                    { y: 414 },
+                    { y: 520, indexLabel: "highest", markerColor: "red", markerType: "triangle" },
+                    { y: 460 },
+                    { y: 450 },
+                    { y: 500 },
+                    { y: 480 },
+                    { y: 480 },
+                    { y: 410, indexLabel: "lowest", markerColor: "DarkSlateGrey", markerType: "cross" },
+                    { y: 500 },
+                    { y: 480 },
+                    { y: 510 }
+                ]
+            }]
+        });
+
+        generationScoreChart.render();
+    }
+</script>

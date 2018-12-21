@@ -23,7 +23,15 @@ namespace ParallelGeneticAlgorithm
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+                "~/Scripts/umd/popper.js",
+                "~/Scripts/bootstrap.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/canvasjs").Include(
+                "~/Scripts/canvasjs.min.js"
+                ));
+
+            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/Site.css"));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/jquery.ui.core.css",
