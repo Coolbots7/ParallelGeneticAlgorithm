@@ -13,54 +13,73 @@
     <link href="~/Content/font-awesome.css" rel="stylesheet">
     @Styles.Render("~/Content/css")
 
-</head>
-<body class="bg-light">
-    <nav class="site-header sticky-top py-1">
-        <div class="container d-flex flex-column flex-md-row justify-content-between">
-            <a class="py-2" href="#">
-                Parallel Genetic Algorithm
-            </a>
-            <a class="py-2 d-none d-md-inline-block" href="#">Home</a>
-            <a class="py-2 d-none d-md-inline-block" href="#">Settings</a>
-            <a class="py-2 d-none d-md-inline-block" href="#">Log</a>
-            <a class="py-2 d-none d-md-inline-block" href="@Url.Action("About", "Home")">About</a>
-        </div>
-    </nav>
-
-    <div class="position-relative overflow-hidden p-md-2 m-md-3 text-center">
-
-        @RenderBody()
-
-        <footer class="pt-4 my-md-5 pt-md-5 border-top">
-            <div class="row">
-                <div class="col-12 col-md">
-                    <small class="d-block mb-3 text-muted">&copy; 2017-2018</small>
-                </div>
-                <div class="col-6 col-md">
-                    <h5>Features</h5>
-                    <ul class="list-unstyled text-small">
-                        <li><a class="text-muted" href="https://github.com/Coolbots7/ParallelGeneticAlgorithm" target="_blank">Cool stuff</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-md">
-                    <h5>Resources</h5>
-                    <ul class="list-unstyled text-small">
-                        <li><a class="text-muted" href="https://github.com/Coolbots7/ParallelGeneticAlgorithm" target="_blank">GitHub</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-md">
-                    <h5>About</h5>
-                    <ul class="list-unstyled text-small">
-                        <li><a class="text-muted" href="@Url.Action("About", "Home")">Team</a></li>
-                        @*<li><a class="text-muted" href="#">Terms</a></li>*@
-                    </ul>
-                </div>
-            </div>
-        </footer>
-    </div>
-
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+</head>
+<body class="bg-light">
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <a class="navbar-brand" href="#">Parallel GA</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Data Browser</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("About", "Home")">About</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+
+    @RenderBody()
+
+    @*<footer class="footer mt-auto py-3">
+        <div class="container">
+            <span class="text-muted">Place sticky footer content here.</span>
+        </div>
+    </footer>*@
+
+    @*<div class="position-relative overflow-hidden p-md-2 m-md-3 text-center">
+            <footer class="pt-4 my-md-5 pt-md-5 border-top">
+                <div class="row">
+                    <div class="col-12 col-md">
+                        <small class="d-block mb-3 text-muted">&copy; 2017-2018</small>
+                    </div>
+                    <div class="col-6 col-md">
+                        <h5>Features</h5>
+                        <ul class="list-unstyled text-small">
+                            <li><a class="text-muted" href="https://github.com/Coolbots7/ParallelGeneticAlgorithm" target="_blank">Cool stuff</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-6 col-md">
+                        <h5>Resources</h5>
+                        <ul class="list-unstyled text-small">
+                            <li><a class="text-muted" href="https://github.com/Coolbots7/ParallelGeneticAlgorithm" target="_blank">GitHub</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-6 col-md">
+                        <h5>About</h5>
+                        <ul class="list-unstyled text-small">
+                            <li><a class="text-muted" href="@Url.Action("About", "Home")">Team</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </footer>
+        </div>*@
+
 </body>
 </html>

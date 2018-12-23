@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneticAlgorithm", "Genetic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GAForm", "GAForm\GAForm.csproj", "{B0F732CE-B305-48E2-A0E6-2800BA5AC5A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParallelGA", "ParallelGA\ParallelGA.csproj", "{54B8AF8F-6993-428D-9C02-8CA4C8B99EF6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,18 +55,6 @@ Global
 		{B0F732CE-B305-48E2-A0E6-2800BA5AC5A5}.Release|x64.Build.0 = Release|x64
 		{B0F732CE-B305-48E2-A0E6-2800BA5AC5A5}.Release|x86.ActiveCfg = Release|x86
 		{B0F732CE-B305-48E2-A0E6-2800BA5AC5A5}.Release|x86.Build.0 = Release|x86
-		{54B8AF8F-6993-428D-9C02-8CA4C8B99EF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54B8AF8F-6993-428D-9C02-8CA4C8B99EF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54B8AF8F-6993-428D-9C02-8CA4C8B99EF6}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{54B8AF8F-6993-428D-9C02-8CA4C8B99EF6}.Debug|x64.Build.0 = Debug|Any CPU
-		{54B8AF8F-6993-428D-9C02-8CA4C8B99EF6}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{54B8AF8F-6993-428D-9C02-8CA4C8B99EF6}.Debug|x86.Build.0 = Debug|Any CPU
-		{54B8AF8F-6993-428D-9C02-8CA4C8B99EF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{54B8AF8F-6993-428D-9C02-8CA4C8B99EF6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{54B8AF8F-6993-428D-9C02-8CA4C8B99EF6}.Release|x64.ActiveCfg = Release|Any CPU
-		{54B8AF8F-6993-428D-9C02-8CA4C8B99EF6}.Release|x64.Build.0 = Release|Any CPU
-		{54B8AF8F-6993-428D-9C02-8CA4C8B99EF6}.Release|x86.ActiveCfg = Release|Any CPU
-		{54B8AF8F-6993-428D-9C02-8CA4C8B99EF6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,90 +2,180 @@
     ViewBag.Title = "Home";
 }
 
-<div class="card-deck mb-3 text-center">
-    <div class="card shadow-sm">
-        <div class="card-header">
-            <span class="my-0 font-weight-normal">Controls</span>
-        </div>
-        <div class="card-body">
-            <button type="button" class="btn btn-outline-success"><i class="fa fa-play"></i>&nbsp;Start</button>
-            <button type="button" class="btn btn-outline-secondary"><i class="fa fa-pause"></i>&nbsp;Pause</button>
-            <button type="button" class="btn btn-outline-secondary"><i class="fa fa-stop"></i>&nbsp;Stop</button>
-            <br />
-            <button type="button" class="btn btn-sm btn-outline-danger mt-3">Reset</button>
-        </div>
-    </div>
-    <div class="card shadow-sm">
-        <div class="card-header">
-            <span class="my-0 font-weight-normal">Settings</span>
-        </div>
-        <div class="card-body">
-        </div>
-    </div>
-    <div class="card shadow-sm">
-        <div class="card-header">
-            <span class="my-0 font-weight-normal">Export</span>
-        </div>
-        <div class="card-body">
-            <button type="button" class="btn btn-sm btn-outline-info mb-2">Export CSV</button><br />
-            <button type="button" class="btn btn-sm btn-outline-info">Export HTML</button>
-        </div>
-    </div>
-</div>
+<main role="main">
+    <div class="container">
 
-<div class="card mb-3">
-    <div class="card-body">
         <div class="row">
-            <div class="col">
-                <h5>Current Generation</h5>
-                <h6>0</h6>
-            </div>
-            <div class="col">
-                <h5>Best Generation Score</h5>
-                <h6>-1</h6>
-            </div>
-            <div class="col">
-                <h5>Best Overall Score</h5>
-                <h6>-1 <span class="text-muted"> (Generation X)</span></h6>
-            </div>
-            <div class="col">
-                <h5>Run Time</h5>
-                <h6>00:00:00</h6>
-            </div>
-        </div>
-    </div>
-</div>
+            <div class="col-md-4 order-0">
+                <div class="my-3 p-3 bg-white rounded shadow-sm">
+                    <h6 class="border-bottom border-gray pb-2 mb-0">Controls</h6>
 
-<div class="row">
-    <div class="col-6">
-        <div class="card" id="generationScoreChart" style="height: 400px;">
+                    <div class="media text-muted pt-3">
+                        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                            <div class="d-flex justify-content-around align-items-center w-100">
+                                <button type="button" class="btn btn-outline-success" data-toggle="tooltip" data-placement="bottom" title="Run Continuous"><i class="fa fa-play"></i></button>
+                                <button type="button" class="btn btn-outline-success" data-toggle="tooltip" data-placement="bottom" title="Run 1 Generation"><i class="fa fa-angle-right"></i></button>
+
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-success" data-toggle="tooltip" data-placement="bottom" title="Run 10 Generation"><i class="fa fa-angle-double-right"></i></button>
+                                    <button type="button" class="btn btn-outline-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#">100</a>
+                                        <a class="dropdown-item" href="#">1,000</a>
+                                        <a class="dropdown-item" href="#">10,000</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="media text-muted pt-3">
+                        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                            <div class="d-flex justify-content-around align-items-center w-100">
+                                <button type="button" class="btn btn-outline-warning" data-toggle="tooltip" data-placement="bottom" title="Pause running"><i class="fa fa-pause"></i></button>
+                                <button type="button" class="btn btn-outline-danger" data-toggle="tooltip" data-placement="bottom" title="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="media text-muted pt-3">
+                        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                            <div class="d-block justify-content-around align-content-center w-100">
+                                <div class="mb-3 text-center">
+                                    <button type="button" class="btn btn-sm btn-outline-info">Export Current Generation</button>
+                                </div>
+                                <div class="mb-3 text-center">
+                                    <button type="button" class="btn btn-sm btn-outline-info">Export Top Performer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="media text-muted pt-3">
+                        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                            <div class="d-block justify-content-around align-content-center w-100">
+                                <div class="mb-3 text-center">
+                                    <button type="button" class="btn btn-sm btn-outline-info">Import Generation</button>
+                                </div>
+                                <div class="mb-3 text-center">
+                                    <button type="button" class="btn btn-sm btn-outline-info">Import Top Performers</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="media text-muted pt-3">
+                        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                            <div class="d-flex justify-content-around align-items-center w-100">
+
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-info" data-toggle="tooltip" data-placement="bottom" title="Export PDF Report">Export Report</button>
+                                    <button type="button" class="btn btn-sm btn-outline-info dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#">PDF</a>
+                                        <a class="dropdown-item" href="#">HTML</a>
+                                        <a class="dropdown-item" href="#">CSV</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col order-1">
+                <div class="row">
+                    <div class="col">
+                        <div class="my-3 p-3 bg-white rounded shadow-sm">
+                            <h6 class="border-bottom border-gray pb-2 mb-0"></h6>
+
+                            <div class="row">
+                                <div class="col">
+                                    <strong class="text-gray-dark">Current Generation</strong>
+                                    <small>0</small>
+                                </div>
+                                <div class="col">
+                                    <strong class="text-gray-dark">Best Generation Score</strong>
+                                    <small>-1</small>
+                                </div>
+                                <div class="col">
+                                    <strong class="text-gray-dark">Best Overall Score</strong>
+                                    <small>-1 <span class="text-muted"> (Generation X)</span></small>
+                                </div>
+                                <div class="col text-center">
+                                    <strong class="text-gray-dark">Run Time</strong>
+                                    <small>00:00:00</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="my-3 p-3 bg-white rounded shadow-sm">
+                            <h6 class="border-bottom border-gray pb-2 mb-0">Fittness</h6>
+                            <div class="card" id="generationScoreChart" style="height: 400px;">
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+
+@*<div class="card-deck mb-3 text-center">
+
+
+    <div class="card mb-3">
+        <div class="card-body">
+
         </div>
     </div>
 
-    <div class="col">
-        <div class="card">
-            <div class="card-header">
-                Event Log
-            </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Message</th>
-                        <th>Time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Tested Generation 0 - Chromosome 0: Score 400</td>
-                        <td>2018-12-08 00:00:00.000</td>
-                    </tr>
-                </tbody>
-            </table>
+    <div class="row">
+        <div class="col-6">
+
         </div>
-    </div>
-</div>
+
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Event Log
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Message</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Tested Generation 0 - Chromosome 0: Score 400</td>
+                            <td>2018-12-08 00:00:00.000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>*@
 
 <script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
     window.onload = function () {
         var generationScoreChart = new CanvasJS.Chart("generationScoreChart", {
             animationEnabled: true,
